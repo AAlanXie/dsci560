@@ -18,11 +18,15 @@ def space(num_lines=1):
         st.write("")
 
 
-chart_data = pd.DataFrame(
-    np.random.randn(20, 3),
-    columns=['positive', 'negative', 'neutral'])
+st.markdown("# Sentiment Analysis and Report ❄️")
 
-st.markdown("# Page 2 ❄️")
+
+df = pd.DataFrame(
+   np.random.randn(100, 8),
+   columns=("Date", "original text", "positive", "negative", "neutral", "keyword", "category", "summarization")
+)
+
+st.dataframe(df)
 
 
 start_time, end_time = datetime.date(2020, 1, 1), datetime.date(2021, 1, 1)
@@ -30,9 +34,9 @@ s, e = st.slider(
     "Please select a time range:",
     value=(start_time, end_time))
 
+
 st.write("Start time:", s)
 st.write("End time:", e)
-
 
 options = st.multiselect(
     'Which topic are you focusing on?',
@@ -45,6 +49,11 @@ space(2)
 st.markdown("---")
 
 space(2)
+
+
+chart_data = pd.DataFrame(
+    np.random.randn(20, 3),
+    columns=['positive', 'negative', 'neutral'])
 
 # Description: This is a simple streamlit app that displays a line chart
 st.line_chart(chart_data)

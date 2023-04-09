@@ -1,6 +1,10 @@
 # Contents of ~/my_app/pages/page_3.py
 import streamlit as st
+import openai
+import os
 from streamlit_chat import message
+
+openai.api_key = ""
 
 
 def space(num_lines=1):
@@ -78,10 +82,24 @@ def get_text():
     return input_text
 
 
+def chatgpt_answer(user_query):
+    response = openai.Completion.create(
+        engine="text-davinci-003",
+        prompt=user_query,
+        max_tokens=50,
+        n=1,
+        stop=None,
+        temperature=0.5,
+    )
+
+    return response.choices[0].text
+
+
 user_input = get_text()
 
 if user_input:
-    output = "I am fine, thank you."
+    # output = chatgpt_answer(user_input)
+    output = "hahaha"
     # store the output
     st.session_state.past.append(user_input)
     st.session_state.generated.append(output)
@@ -90,6 +108,9 @@ if user_input:
 # Displaying the chat
 if st.session_state['generated']:
     for i in range(len(st.session_state['generated'])-1, -1, -1):
-        message(st.session_state["generated"][i], key=str(i))
+        message(st.session_state["generated"][i],
+                key=str(i),
+                avatar_style="adventurer",
+                seed=560)
         message(st.session_state['past'][i],
                 is_user=True, key=str(i) + '_user')
