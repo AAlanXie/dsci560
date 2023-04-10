@@ -21,7 +21,7 @@ def display_answer(question):
     st.write(answer)
 
 
-header_text = "Here are the potential problem discover from social media data, " \
+header_text = "Here are the potential problem discovered from social media data, " \
               "click to see how ChatGPT addresses those problems."
 st.subheader(header_text)
 # Define the questions and answers

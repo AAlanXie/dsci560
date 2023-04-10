@@ -29,6 +29,9 @@ df = pd.DataFrame(
 st.dataframe(df)
 
 
+# line chart
+st.markdown("# Trends in Public's Sentiment towards City Services")
+
 start_time, end_time = datetime.date(2020, 1, 1), datetime.date(2021, 1, 1)
 s, e = st.slider(
     "Please select a time range:",
@@ -67,6 +70,8 @@ st.markdown("---")
 space(2)
 
 st.subheader("Word Cloud")
+st.markdown("# Word Cloud")
+st.markdown("## Extract the most frequent keywords used on social media in the past 7 days")
 
 d = path.dirname(__file__) if "__file__" in locals() else os.getcwd()
 assets = path.join(path.dirname(d), "assets")
