@@ -6,6 +6,8 @@ from streamlit_chat import message
 
 openai.api_key = ""
 
+t = ""
+
 
 def space(num_lines=1):
     """Adds empty lines to the Streamlit app."""
@@ -13,7 +15,14 @@ def space(num_lines=1):
         st.write("")
 
 
-header_text = "Here are the potential problem discover from social media data, click to see how ChatGPT addresses those problems."
+# ----------------------------------  latent problems ----------------
+def display_answer(question):
+    answer = questions[question]
+    st.write(answer)
+
+
+header_text = "Here are the potential problem discover from social media data, " \
+              "click to see how ChatGPT addresses those problems."
 st.subheader(header_text)
 # Define the questions and answers
 questions = {
@@ -39,16 +48,9 @@ questions = {
 }
 
 
-# Define a function to display the answer when a question is clicked
-
-
-def display_answer(question):
-    answer = questions[question]
-    st.write(answer)
-
-
 # Create a list of clickable question titles
 question_titles = [q for q in questions.keys()]
+
 
 # Display the questions and answers
 for title in question_titles:
@@ -56,29 +58,14 @@ for title in question_titles:
     if st.button(title):
         # Display the answer when the question title is clicked
         display_answer(title)
-
-# blank line
-space(2)
-
-st.markdown("---")
-
-space(2)
+        t = title
+        st.session_state['generated'] = []
+        st.session_state['past'] = []
 
 
-# Creating the chatbot interface
-st.subheader("Hi : Ask GPT if you have further questions.")
-
-# Storing the chat
-if 'generated' not in st.session_state:
-    st.session_state['generated'] = []
-
-if 'past' not in st.session_state:
-    st.session_state['past'] = []
-
-
-# We will get the user's input by calling the get_text function
+# ----------------------------- chat box --------------------------------
 def get_text():
-    input_text = st.text_input("You: ", "Hello, how are you?", key="input")
+    input_text = st.text_input("You: ", t, key="input")
     return input_text
 
 
@@ -95,15 +82,29 @@ def chatgpt_answer(user_query):
     return response.choices[0].text
 
 
+# blank line
+space(1)
+st.markdown("---")
+space(1)
+
+# Creating the chatbot interface
+st.subheader("Hi : Ask GPT if you have further questions.")
+
 user_input = get_text()
 
-if user_input:
-    # output = chatgpt_answer(user_input)
-    output = "hahaha"
-    # store the output
-    st.session_state.past.append(user_input)
-    st.session_state.generated.append(output)
+# Storing the chat
+if 'generated' not in st.session_state:
+    st.session_state['generated'] = []
 
+if 'past' not in st.session_state:
+    st.session_state['past'] = []
+
+if user_input:
+    output = chatgpt_answer(user_input)
+    # output = "hahaha"
+    # store the output
+    st.session_state['past'].append(user_input)
+    st.session_state['generated'].append(output)
 
 # Displaying the chat
 if st.session_state['generated']:
