@@ -8,8 +8,11 @@ import matplotlib.pyplot as plt
 from PIL import Image
 from os import path
 import os
+import json
 
-# blank line
+
+d = path.dirname(__file__) if "__file__" in locals() else os.getcwd()
+assets = path.join(path.dirname(d), "assets")
 
 
 def space(num_lines=1):
@@ -18,19 +21,31 @@ def space(num_lines=1):
         st.write("")
 
 
-st.markdown("# Sentiment Analysis and Report ❄️")
+def read_json(file):
+    f = open(file, "r")
+    data = json.load(f)
+    f.close()
+    return data
 
 
-df = pd.DataFrame(
-   np.random.randn(100, 8),
-   columns=("Date", "original text", "positive", "negative", "neutral", "keyword", "category", "summarization")
-)
+st.subheader("Sentiment Analysis and Report ❄️")
+
+
+df = pd.DataFrame(read_json(path.join(assets, "new_reddit.json")))
+# df = pd.DataFrame(
+#    np.random.randn(100, 8),
+#    columns=("Date", "original text", "positive", "negative", "neutral", "keyword", "category", "summarization")
+# )
 
 st.dataframe(df)
 
+# blank line
+space(2)
+st.markdown("---")
+space(2)
 
 # line chart
-st.markdown("# Trends in Public's Sentiment towards City Services")
+st.subheader("Trends in Public's Sentiment towards City Services")
 
 start_time, end_time = datetime.date(2020, 1, 1), datetime.date(2021, 1, 1)
 s, e = st.slider(
@@ -49,14 +64,10 @@ options = st.multiselect(
 # blank line
 space(2)
 
-st.markdown("---")
-
-space(2)
-
-
 chart_data = pd.DataFrame(
     np.random.randn(20, 3),
-    columns=['positive', 'negative', 'neutral'])
+    columns=['positive', 'negative', 'neutral']
+)
 
 # Description: This is a simple streamlit app that displays a line chart
 st.line_chart(chart_data)
@@ -70,11 +81,8 @@ st.markdown("---")
 space(2)
 
 st.subheader("Word Cloud")
-st.markdown("# Word Cloud")
-st.markdown("## Extract the most frequent keywords used on social media in the past 7 days")
+st.markdown("Extract the most frequent keywords used on social media in the past 7 days")
 
-d = path.dirname(__file__) if "__file__" in locals() else os.getcwd()
-assets = path.join(path.dirname(d), "assets")
 cloud_mask = np.array(Image.open(path.join(assets, "cloud.png")))
 
 # text holder
