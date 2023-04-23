@@ -12,7 +12,7 @@ st.markdown(
 # Add an introduction section with team information
 st.header("Introduction 🙌")
 st.markdown("""
-    Welcome to our website, NO LATE! We are a team of four students from USC. Our team members are:
+    Welcome to our website, we are NO LATE! We are a team of four students from USC. Our team members are:
     
     - Tianqi Xie
     - Li An
