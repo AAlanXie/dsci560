@@ -109,8 +109,8 @@ if 'past' not in st.session_state:
     st.session_state['past'] = []
 
 if user_input:
-    # output = chatgpt_answer(user_input)
-    output = "hahaha"
+    output = chatgpt_answer(user_input)
+    # output = "hahaha"
     # store the output
     st.session_state['past'].append(user_input)
     st.session_state['generated'].append(output)

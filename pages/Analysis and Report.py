@@ -105,19 +105,19 @@ st.write("End time:", e)
 
 # Choose the topic
 options = st.multiselect(
-    'Which topic are you focusing on?',
+    'Which topics are you focusing on?',
     ['All', 'affordable housing', 'crime', 'homeless', 'traffic', 'water supply'],
     ['All'])
 
 
 # Choose the cities
-# cities = st.multiselect(
-#     'Which topic are you focusing on?',
-#     ['All', 'Los Angeles', 'Torrance', 'Santa Monica', 'Pasadena', 'Long Beach', 'Culver City'],
-#     ['All'])
+cities = st.multiselect(
+    'Which cities are you focusing on?',
+    ['All', 'Los Angeles', 'Torrance', 'Santa Monica', 'Pasadena', 'Long Beach', 'Culver City'],
+    ['All'])
 
 
-def filter_dataframe(df, start, end, topic):
+def filter_dataframe(df, start, end, topic, cities):
     filter1 = df[df["date"] > str(start)]
     filter2 = filter1[filter1["date"] < str(end)]
     if "All" in topic:
@@ -126,7 +126,14 @@ def filter_dataframe(df, start, end, topic):
     for t in topic:
         ft = filter2[filter2["topic"] == t]
         df_set.append(ft)
-    return pd.concat(df_set)
+    filter3 = pd.concat(df_set)
+    if "All" in cities:
+        return filter3
+    ct_set = []
+    for c in cities:
+        ct = filter3[filter3["city"] == c]
+        ct_set.append(ct)
+    return pd.concat(ct_set)
 
 
 def filter_city(df, city):
@@ -134,13 +141,13 @@ def filter_city(df, city):
     return data
 
 
-filtered_df = filter_dataframe(original_df, s, e, options)
+filtered_df = filter_dataframe(original_df, s, e, options, cities)
 
 diff_city_df_set = []
-# if "All" not in cities:
-#     for city in cities:
-#         data = filter_city(filtered_df, city)
-#         diff_city_df_set.append(data)
+if "All" not in cities:
+    for city in cities:
+        data = filter_city(filtered_df, city)
+        diff_city_df_set.append(data)
 
 
 st.subheader("Data table display️")
@@ -176,12 +183,16 @@ if not diff_city_df_set:
     st.write("Overall Positive Rate: ", overall_positive / (overall_positive + overall_negative + overall_neutral))
     st.write("Overall Negative Rate: ", overall_negative / (overall_positive + overall_negative + overall_neutral))
     st.write("Overall Neutral Rate: ", overall_neutral / (overall_positive + overall_negative + overall_neutral))
-
-# else:
-#     for index, city_df in enumerate(diff_city_df_set):
-#         st.write("The following line chart represent city :", cities[index])
-#         chart_data = product_chart_data(city_df)
-#         st.line_chart(chart_data)
+else:
+    for index, city_df in enumerate(diff_city_df_set):
+        st.markdown("#### The following line chart represent city :<span style='color:red'>" + cities[index] + "</span>",
+                    unsafe_allow_html=True)
+        chart_data = product_chart_data(city_df)
+        st.line_chart(chart_data)
+        overall_positive, overall_negative, overall_neutral = produce_overall_sentiment_layout(city_df)
+        st.write("Overall Positive Rate: ", overall_positive / (overall_positive + overall_negative + overall_neutral))
+        st.write("Overall Negative Rate: ", overall_negative / (overall_positive + overall_negative + overall_neutral))
+        st.write("Overall Neutral Rate: ", overall_neutral / (overall_positive + overall_negative + overall_neutral))
 
 
 st.markdown("---")
@@ -238,7 +249,9 @@ def generate_latent_problems(counter):
         text += " " + word + ": " + str(cnt) + ","
 
     latent_problems = chatgpt_answer(text)
-    print(latent_problems)
+    st.write("#### Latent Problems")
+    st.write("Generate the latent problems based on the 30 keywords with the most occurrences we extracted.")
+    st.write(latent_problems.split(','))
     problem_dict = dict()
     problem_dict["questions"] = dict()
     for problem in latent_problems.split(','):
@@ -252,4 +265,4 @@ def generate_latent_problems(counter):
         json.dump(problem_dict, f, indent=2)
 
 
-# generate_latent_problems(counter)
+generate_latent_problems(counter)

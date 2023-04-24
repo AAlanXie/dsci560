@@ -21,7 +21,7 @@ st.markdown("""
 
     Our goal is to analyze public sentiment towards city services in the Los Angeles and Pasadena areas using data from social media platforms like Twitter and Reddit. By using sentiment analysis, we can identify potential problems with city services based on public views expressed on social media.
 
-    The results of the sentiment analysis are displayed on [Page 2](./page2) and [Page 3](./page3). Users can interact with ChatGPT on those pages to get basic solutions to the problems identified. 
+    The results of the sentiment analysis are displayed on [Analysis and Report](./page2) and [Latent Problems and Solution](./page3). Users can interact with ChatGPT on those pages to get basic solutions to the problems identified. 
 
     We hope that our website will provide useful insights for city officials and help improve city services based on public feedback. 🤞
 """)

@@ -108,7 +108,8 @@ class Sentence_Analyzer:
         return text
 
     def sentiment_analysis(self):
-        score = SentimentIntensityAnalyzer().polarity_scores(self.sentence)
+        text = self.clean_text()
+        score = SentimentIntensityAnalyzer().polarity_scores(text)
         return score
 
 
